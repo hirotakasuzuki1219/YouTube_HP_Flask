@@ -1,8 +1,8 @@
 from flask import Flask, render_template
-from flask_mail import Mail, Message
-from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, TextAreaField, SubmitField
-from wtforms.validators import DataRequired, Email
+# from flask_mail import Mail, Message
+# from flask_wtf import FlaskForm, RecaptchaField
+# from wtforms import StringField, TextAreaField, SubmitField
+# from wtforms.validators import DataRequired, Email
 from dotenv import load_dotenv
 import os
 
@@ -52,3 +52,6 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+if __name__ == "__main__":
+    app.run()
