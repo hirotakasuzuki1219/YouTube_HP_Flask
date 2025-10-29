@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>お問い合わせ</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>お問い合わせ</h1>
+    <nav>
+      <a href="/">ホーム</a>
+      <a href="/contact">お問い合わせ</a>
+    </nav>
+  </header>
+
+  <main>
+    {% if success %}
+      <p style="color:green;">送信完了！ありがとうございます。</p>
+    {% endif %}
+
+    <form method="POST">
+      {{ form.hidden_tag() }}
+
+      <label>{{ form.name.label }}<br>{{ form.name(size=30) }}</label><br><br>
+      <label>{{ form.email.label }}<br>{{ form.email(size=30) }}</label><br><br>
+      <label>{{ form.message.label }}<br>{{ form.message(cols=40, rows=5) }}</label><br><br>
+
+      {{ form.recaptcha() }}<br><br>
+
+      {{ form.submit() }}
+    </form>
+  </main>
+</body>
+</html>
