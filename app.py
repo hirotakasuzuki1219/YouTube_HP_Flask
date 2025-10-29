@@ -50,8 +50,8 @@ def home():
 #         success = True
 #     return render_template('contact.html', form=form, success=success)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
 if __name__ == "__main__":
     app.run()
