@@ -3,10 +3,10 @@ from flask import Flask, render_template
 # from flask_wtf import FlaskForm, RecaptchaField
 # from wtforms import StringField, TextAreaField, SubmitField
 # from wtforms.validators import DataRequired, Email
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 
-load_dotenv()
+# load_dotenv()
 
 app = Flask(__name__)
 # app.secret_key = os.urandom(24)
