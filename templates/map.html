@@ -2,31 +2,25 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>旅マップ</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <title>ひろの旅マップ</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
   <style>
     #map { height: 90vh; width: 100%; }
   </style>
 </head>
 <body>
-  <h2>🌏 ひろの旅マップ</h2>
+  <h1>🌏 ひろの旅マップ</h1>
   <div id="map"></div>
 
-  <script>
-    // 地図の初期設定
-    var map = L.map('map').setView([35.68, 139.76], 5); // 東京中心
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    // ピンを追加
-    var travels = [
-      { name: "東京", lat: 35.68, lon: 139.76, note: "出発地！" },
-      { name: "京都", lat: 35.01, lon: 135.77, note: "紅葉がきれいだった🍁" }
-    ];
-
-    travels.forEach(t => {
-      L.marker([t.lat, t.lon]).addTo(map).bindPopup(`<b>${t.name}</b><br>${t.note}`);
-    });
-  </script>
+  <!-- 自分のJavaScript -->
+  <script src="{{ url_for('static', filename='js/map.js') }}"></script>
 </body>
 </html>
