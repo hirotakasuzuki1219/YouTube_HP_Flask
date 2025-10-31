@@ -15,6 +15,13 @@ var travels = [
     note: "ここから世界一周をスタート！まずはエジプトへ",
     youtube: "https://youtu.be/MsZmu32UglE"
   },
+  {
+    name: "エジプト・ギザ周辺",
+    lat: 29.972883, 
+    lon: 31.128796,
+    note: "ピラミッド周辺を観光ツアーに参加",
+    youtube: "https://youtu.be/_1sYoq9pQWg"
+  },
 ];
 
 // ピンを追加
