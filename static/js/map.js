@@ -9,19 +9,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // 旅のデータ
 var travels = [
   {
-    name: "京都",
-    lat: 35.01,
-    lon: 135.77,
-    note: "紅葉が綺麗だった！",
-    youtube: "https://www.youtube.com/embed/動画ID"
+    name: "成田国際空港",
+    lat: 35.776366,
+    lon: 140.386249,
+    note: "ここから世界一周をスタート！まずはエジプトへ",
+    youtube: "https://youtu.be/MsZmu32UglE"
   },
-  {
-    name: "東京",
-    lat: 35.68,
-    lon: 139.76,
-    note: "出発地！",
-    youtube: "https://www.youtube.com/embed/動画ID2"
-  }
 ];
 
 // ピンを追加
