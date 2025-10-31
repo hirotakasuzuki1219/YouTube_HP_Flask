@@ -5,6 +5,10 @@
   <meta charset="UTF-8">
   <title>ゆか＆ひろ（家族世界一周）</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    #map { height: 90vh; width: 100%; }
+  </style>
 </head>
 
 <body>
@@ -12,8 +16,8 @@
     <h1>🌏 ゆか＆ひろ（家族世界一周）</h1>
     <nav>
       <a href="/">ホーム</a>
-      <!-- <a href="#">旅の記録</a>
-      <a href="#">動画リンク</a> -->
+      <a href="/map">世界一周の軌跡</a>
+      <!-- <a href="#">動画リンク</a> -->
       <!-- <a href="/contact">お問い合わせ</a> -->
     </nav>
   </header>

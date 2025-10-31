@@ -38,6 +38,10 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
+@app.route("/map")
+def map_page():
+    return render_template("map.html")
+
 # @app.route('/contact', methods=['GET', 'POST'])
 # def contact():
 #     form = ContactForm()
