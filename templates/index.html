@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <title>ゆか＆ひろ（家族世界一周）</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     #map { height: 90vh; width: 100%; }
-  </style>
+  </style> -->
 </head>
 
 <body>
@@ -20,6 +20,11 @@
       <!-- <a href="#">動画リンク</a> -->
       <!-- <a href="/contact">お問い合わせ</a> -->
     </nav>
+    <div class="container">
+      <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="プロフィール" class="profile">
+      <!-- <h1>Our Trip Life</h1> -->
+      <!-- <p>世界を旅する家族の記録</p> -->
+    </div>
   </header>
 
   <main>

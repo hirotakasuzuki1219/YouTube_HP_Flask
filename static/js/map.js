@@ -1,5 +1,5 @@
 // 地図の初期表示
-var map = L.map('map').setView([35.68, 139.76], 5);
+var map = L.map('map').setView([35.776366, 140.386249], 2);
 
 // 背景地図
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -13,7 +13,7 @@ var travels = [
     lat: 35.776366,
     lon: 140.386249,
     note: "ここから世界一周をスタート！まずはエジプトへ",
-    youtube: "https://www.youtube.com/embed/vH0D62mrzXM"
+    youtube: "https://www.youtube.com/embed/MsZmu32UglE"
   },
   {
     name: "エジプト・ギザ周辺",
@@ -21,6 +21,13 @@ var travels = [
     lon: 31.128796,
     note: "ピラミッド周辺を観光ツアーに参加",
     youtube: "https://www.youtube.com/embed/_1sYoq9pQWg"
+  },
+    {
+    name: "大エジプト博物館入場",
+    lat: 29.995239, 
+    lon: 31.119273,
+    note: "プレオープン中のレアな時期に潜入",
+    youtube: "https://www.youtube.com/embed/-6LvRT89h_k"
   },
 ];
 

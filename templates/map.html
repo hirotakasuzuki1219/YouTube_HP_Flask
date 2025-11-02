@@ -10,11 +10,27 @@
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
   <style>
-    #map { height: 90vh; width: 100%; }
+    #map {
+      height: 50vh;
+      width: 50%;
+      margin: 20px auto;  /* 上下20px、左右中央 */
+    }
   </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>🌏 世界一周の軌跡</h1>
+  <header>
+    <h1>🌏 ゆか＆ひろ（家族世界一周）</h1>
+    <nav>
+      <a href="/">ホーム</a>
+      <a href="/map">世界一周の軌跡</a>
+           <div class="container">
+      <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="プロフィール" class="profile">
+    </div>
+    </nav>
+  </header>
+
+  <h1 style="text-align: center;">🌏 世界一周の軌跡</h1>
   <div id="map"></div>
 
   <!-- Leaflet JS -->
