@@ -9,7 +9,7 @@ body {
 }
 
 /* 背景動画のスタイル - ヘッダーの下から表示 */
-#bg-video {
+/* #bg-video {
   position: fixed;
   top: 0;
   left: 0;
@@ -19,7 +19,7 @@ body {
   z-index: -1;
   pointer-events: none;
   opacity: 0.2;
-}
+} */
 
 /* ヘッダー - 動画の上に表示（不透明な背景で動画を隠す） */
 header {
@@ -31,14 +31,14 @@ header {
   z-index: 2;
 }
 
-header .profile {
+/* header .profile {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   border: 3px solid white;
   margin-top: 20px;
   margin-bottom: 10px;
-}
+} */
 
 nav a {
   color: white;
@@ -71,6 +71,21 @@ footer {
   z-index: 1;
   color: white;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* h2タグのスタイル - はっきり区切る */
+main h2 {
+  color: white;
+  font-size: 1.8em;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+  border-bottom: 3px solid #0077b6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+main section:first-child h2 {
+  margin-top: 0;
 }
 
 /* SNSリンクのスタイル */
