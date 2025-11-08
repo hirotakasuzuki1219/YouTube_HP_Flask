@@ -96,6 +96,7 @@ main a.sns-link {
   font-weight: bold;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
   transition: color 0.3s ease;
+  padding-left: 10px;
 }
 
 main a.sns-link:hover {
