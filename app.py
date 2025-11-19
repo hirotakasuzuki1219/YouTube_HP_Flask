@@ -10,15 +10,15 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route("/map")
-def map_page():
-    return render_template("map.html")
+# @app.route("/map")
+# def map_page():
+#     return render_template("map.html")
 
 # Google Search Console用の検証ファイル
-# @app.route('/google486f7934b3f48a0a.html')
-# def google_verification():
-#     file_path = os.path.join(app.static_folder, 'google486f7934b3f48a0a.html')
-#     return send_file(file_path, mimetype='text/html')
+@app.route('/google486f7934b3f48a0a.html')
+def google_verification():
+    file_path = os.path.join(app.static_folder, 'google486f7934b3f48a0a.html')
+    return send_file(file_path, mimetype='text/html')
 
 # Sitemap.xml
 @app.route('/sitemap.xml')
