@@ -3,22 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>世界一周の軌跡</title>
-
   <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-  <style>
-    #map {
-      height: 50vh;
-      width: 70%;
-      margin: 20px auto;  /* 上下20px、左右中央 */
-    }
-  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
   <header>
@@ -32,13 +20,6 @@
     </nav>
   </header>
 
-  <h1 style="text-align: center;">🌏 世界一周の軌跡</h1>
-  <div id="map"></div>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- 自分のJavaScript -->
-  <script src="{{ url_for('static', filename='js/map.js') }}"></script>
 </body>
 </html>

@@ -32,6 +32,7 @@ main {
   margin: 2em auto;
   /* background: transparent; */
   /* background: rgba(0, 0, 0, 0.7); */
+  font-size: 20px;
   padding: 2em;
   border-radius: 10px;
   box-shadow: none;
@@ -81,6 +82,12 @@ main a.sns-link {
 main a.sns-link:hover {
   /* color: white; */
   text-decoration: underline;
+}
+
+#map {
+  height: 400px;
+  width: 800px;
+  margin: 20px auto;  /* 上下20px、左右中央 */
 }
 
 /* 背景動画のスタイル - ヘッダーの下から表示 */
