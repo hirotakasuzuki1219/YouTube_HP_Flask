@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eligible-nelia-ourtriplife-a21174d1.koyeb.app/sitemap.xml
+

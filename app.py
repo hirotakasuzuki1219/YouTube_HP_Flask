@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 import os
 
 # load_dotenv()
@@ -13,6 +13,21 @@ def home():
 @app.route("/map")
 def map_page():
     return render_template("map.html")
+
+# Google Search Console用の検証ファイル
+@app.route('/google486f7934b3f48a0a.html')
+def google_verification():
+    return send_from_directory('others', 'google486f7934b3f48a0a.html')
+
+# Sitemap.xml
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('static', 'sitemap.xml', mimetype='application/xml')
+
+# robots.txt
+@app.route('/robots.txt')
+def robots_txt():
+    return send_from_directory('static', 'robots.txt', mimetype='text/plain')
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
