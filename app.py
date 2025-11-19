@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, send_file
 import os
 
 # load_dotenv()
@@ -15,9 +15,10 @@ def map_page():
     return render_template("map.html")
 
 # Google Search Console用の検証ファイル
-@app.route('/google486f7934b3f48a0a.html')
-def google_verification():
-    return send_from_directory('others', 'google486f7934b3f48a0a.html')
+# @app.route('/google486f7934b3f48a0a.html')
+# def google_verification():
+#     file_path = os.path.join(app.static_folder, 'google486f7934b3f48a0a.html')
+#     return send_file(file_path, mimetype='text/html')
 
 # Sitemap.xml
 @app.route('/sitemap.xml')
