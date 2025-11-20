@@ -46,7 +46,8 @@ footer {
   text-align: center;
   margin-top: 2em;
   padding: 1em;
-  background: transparent;
+  /* background: transparent; */
+  background: rgba(0, 119, 182, 0.95);
   position: relative;
   z-index: 1;
   color: white;

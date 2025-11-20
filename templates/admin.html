@@ -234,7 +234,7 @@
           <h3>${travel.name}</h3>
           <p><strong>緯度:</strong> ${travel.lat}, <strong>経度:</strong> ${travel.lon}</p>
           <p><strong>メモ:</strong> ${travel.note || 'なし'}</p>
-          <p><strong>YouTube:</strong> ${travel.youtube ? '<a href="' + travel.youtube + '" target="_blank">' + travel.youtube + '</a>' : 'なし'}</p>
+          <p><strong>YouTube:</strong> ${travel.youtube ? '<a href="' + travel.youtube + '" target="_blank" rel="noopener noreferrer">' + travel.youtube + '</a>' : 'なし'}</p>
           <div class="travel-actions">
             <button class="edit" onclick="editTravel(${travel.id})">編集</button>
             <button class="delete" onclick="deleteTravel(${travel.id})">削除</button>
