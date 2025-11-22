@@ -1,0 +1,54 @@
+.map-page {
+  padding: 2em 0;
+}
+
+.map-header {
+  text-align: center;
+  margin-bottom: 2em;
+  padding: 2em;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.map-header h2 {
+  font-size: 1.8em;
+  margin-bottom: 1em;
+  color: #0077b6;
+  border-bottom: 3px solid #0077b6;
+  padding-bottom: 0.5em;
+  display: inline-block;
+}
+
+.map-header p {
+  font-size: 1.1em;
+  color: #555;
+}
+
+.map-container {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 1em;
+}
+
+#map {
+  height: 600px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.popup-content {
+  max-width: 300px;
+}
+
+.popup-content p {
+  margin: 0.5em 0;
+}
+
+.popup-content iframe {
+  margin-top: 0.5em;
+  border-radius: 4px;
+}
+

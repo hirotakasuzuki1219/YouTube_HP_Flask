@@ -1,16 +1,24 @@
-from flask import Flask, render_template, send_from_directory, send_file, request, jsonify, make_response
+from flask import Flask, render_template, send_from_directory, send_file, request, jsonify, make_response, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from datetime import datetime
 import os
 from functools import wraps
+import hashlib
 
 # load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='dist', static_url_path='')
+# CORSを有効化（認証用のクッキーを送信できるように設定）
+# 開発環境ではlocalhostを許可、本番環境では同一オリジンのみ許可
+if os.environ.get('FLASK_ENV') == 'production':
+    CORS(app, supports_credentials=True, origins=None)  # 同一オリジンのみ
+else:
+    CORS(app, supports_credentials=True, origins=['http://localhost:3000', 'http://localhost:5000'])
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///travels.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24).hex())
-app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SECURE'] = os.environ.get('FLASK_ENV') == 'production'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
@@ -41,6 +49,19 @@ class Travel(db.Model):
 with app.app_context():
     db.create_all()
 
+# 認証用のデコレータ
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('authenticated'):
+            return jsonify({'error': '認証が必要です'}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
+# パスワードのハッシュ化（環境変数から取得、デフォルト値は設定しない）
+def get_admin_password():
+    return os.environ.get('ADMIN_PASSWORD', 'admin123')  # 本番環境では必ず環境変数で設定すること
+
 # セキュリティヘッダーを追加するミドルウェア
 @app.after_request
 def set_security_headers(response):
@@ -51,14 +72,14 @@ def set_security_headers(response):
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
     
-    # CSP (Content Security Policy) - 必要に応じて調整
+    # CSP (Content Security Policy) - Reactアプリ用に調整
     csp = (
         "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline' https://unpkg.com; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; "
         "style-src 'self' 'unsafe-inline' https://unpkg.com; "
         "img-src 'self' data: https:; "
         "font-src 'self' data:; "
-        "connect-src 'self'; "
+        "connect-src 'self' http://localhost:5000; "
         "frame-src 'self' https://www.youtube.com; "
         "frame-ancestors 'none';"
     )
@@ -71,17 +92,20 @@ def set_security_headers(response):
     return response
 
 # --- ルート ---
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-@app.route("/map")
-def map_page():
-    return render_template("map.html")
-
-@app.route("/admin")
-def admin():
-    return render_template("admin.html")
+# React SPAのためのルート - すべてのルートをindex.htmlにリダイレクト
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve_react_app(path):
+    # APIエンドポイントは除外
+    if path.startswith('api/'):
+        return '', 404
+    
+    # 静的ファイル（JS、CSS、画像など）を配信
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
+    
+    # それ以外はReactアプリのindex.htmlを返す（SPAのため）
+    return send_from_directory(app.static_folder, 'index.html')
 
 # APIエンドポイント
 @app.route('/api/travels', methods=['GET'])
@@ -89,7 +113,34 @@ def get_travels():
     travels = Travel.query.order_by(Travel.created_at).all()
     return jsonify([travel.to_dict() for travel in travels])
 
+# 認証APIエンドポイント
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+    password = data.get('password', '')
+    admin_password = get_admin_password()
+    
+    # パスワードの比較（ハッシュ化して比較することも可能）
+    if password == admin_password:
+        session['authenticated'] = True
+        return jsonify({'success': True, 'message': 'ログイン成功'})
+    else:
+        return jsonify({'success': False, 'error': 'パスワードが正しくありません'}), 401
+
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    session.pop('authenticated', None)
+    return jsonify({'success': True, 'message': 'ログアウトしました'})
+
+@app.route('/api/check-auth', methods=['GET'])
+def check_auth():
+    if session.get('authenticated'):
+        return jsonify({'authenticated': True})
+    else:
+        return jsonify({'authenticated': False})
+
 @app.route('/api/travels', methods=['POST'])
+@login_required
 def create_travel():
     data = request.json
     travel = Travel(
@@ -104,6 +155,7 @@ def create_travel():
     return jsonify(travel.to_dict()), 201
 
 @app.route('/api/travels/<int:travel_id>', methods=['PUT'])
+@login_required
 def update_travel(travel_id):
     travel = Travel.query.get_or_404(travel_id)
     data = request.json
@@ -117,6 +169,7 @@ def update_travel(travel_id):
     return jsonify(travel.to_dict())
 
 @app.route('/api/travels/<int:travel_id>', methods=['DELETE'])
+@login_required
 def delete_travel(travel_id):
     travel = Travel.query.get_or_404(travel_id)
     db.session.delete(travel)
