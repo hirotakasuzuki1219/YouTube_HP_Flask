@@ -92,20 +92,122 @@ def set_security_headers(response):
     return response
 
 # --- ルート ---
-# React SPAのためのルート - すべてのルートをindex.htmlにリダイレクト
+# APIエンドポイント（React SPAのルーティングより前に定義する必要がある）
+@app.route('/api/travels', methods=['GET'])
+def get_travels():
+    travels = Travel.query.order_by(Travel.created_at).all()
+    return jsonify([travel.to_dict() for travel in travels])
+
+@app.route('/api/travels', methods=['POST'])
+@login_required
+def create_travel():
+    data = request.json
+    travel = Travel(
+        name=data['name'],
+        lat=float(data['lat']),
+        lon=float(data['lon']),
+        note=data.get('note', ''),
+        youtube=data.get('youtube', '')
+    )
+    db.session.add(travel)
+    db.session.commit()
+    return jsonify(travel.to_dict()), 201
+
+@app.route('/api/travels/<int:travel_id>', methods=['PUT'])
+@login_required
+def update_travel(travel_id):
+    travel = Travel.query.get_or_404(travel_id)
+    data = request.json
+    travel.name = data['name']
+    travel.lat = float(data['lat'])
+    travel.lon = float(data['lon'])
+    travel.note = data.get('note', '')
+    travel.youtube = data.get('youtube', '')
+    travel.updated_at = datetime.utcnow()
+    db.session.commit()
+    return jsonify(travel.to_dict())
+
+@app.route('/api/travels/<int:travel_id>', methods=['DELETE'])
+@login_required
+def delete_travel(travel_id):
+    travel = Travel.query.get_or_404(travel_id)
+    db.session.delete(travel)
+    db.session.commit()
+    return '', 204
+
+# 認証APIエンドポイント
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+    password = data.get('password', '')
+    admin_password = get_admin_password()
+    
+    # パスワードの比較（ハッシュ化して比較することも可能）
+    if password == admin_password:
+        session['authenticated'] = True
+        return jsonify({'success': True, 'message': 'ログイン成功'})
+    else:
+        return jsonify({'success': False, 'error': 'パスワードが正しくありません'}), 401
+
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    session.pop('authenticated', None)
+    return jsonify({'success': True, 'message': 'ログアウトしました'})
+
+@app.route('/api/check-auth', methods=['GET'])
+def check_auth():
+    if session.get('authenticated'):
+        return jsonify({'authenticated': True})
+    else:
+        return jsonify({'authenticated': False})
+
+# 静的ファイルの配信（robots.txt, sitemap.xmlなど）
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('static', 'sitemap.xml', mimetype='application/xml')
+
+@app.route('/robots.txt')
+def robots_txt():
+    return send_from_directory('static', 'robots.txt', mimetype='text/plain')
+
+# React SPAのためのルート - すべてのルートをindex.htmlにリダイレクト（最後に定義）
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react_app(path):
-    # APIエンドポイントは除外
-    if path.startswith('api/'):
-        return '', 404
-    
     # 静的ファイル（JS、CSS、画像など）を配信
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
+    static_folder = app.static_folder
+    if static_folder and path:
+        # アセットファイル（JS、CSSなど）の配信
+        if path.startswith('assets/'):
+            file_path = os.path.join(static_folder, path)
+            if os.path.exists(file_path):
+                return send_from_directory(static_folder, path)
+        
+        # その他の静的ファイル
+        file_path = os.path.join(static_folder, path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return send_from_directory(static_folder, path)
     
     # それ以外はReactアプリのindex.htmlを返す（SPAのため）
-    return send_from_directory(app.static_folder, 'index.html')
+    if static_folder:
+        index_path = os.path.join(static_folder, 'index.html')
+        if os.path.exists(index_path):
+            return send_from_directory(static_folder, 'index.html')
+        else:
+            # distフォルダが存在しない場合のエラーメッセージ
+            return f'''
+            <html>
+                <head><title>Build Required</title></head>
+                <body>
+                    <h1>React app not built</h1>
+                    <p>Please run "npm run build" to build the React app.</p>
+                    <p>Static folder: {static_folder}</p>
+                    <p>Index path: {index_path}</p>
+                </body>
+            </html>
+            ''', 500
+    else:
+        return 'Static folder not configured', 500
 
 # APIエンドポイント
 @app.route('/api/travels', methods=['GET'])
