@@ -10,10 +10,12 @@ import hashlib
 
 app = Flask(__name__, static_folder='dist', static_url_path='')
 # CORSを有効化（認証用のクッキーを送信できるように設定）
-# 開発環境ではlocalhostを許可、本番環境では同一オリジンのみ許可
+# 本番環境では同一オリジンのみ許可（originsを指定しない）
 if os.environ.get('FLASK_ENV') == 'production':
-    CORS(app, supports_credentials=True, origins=None)  # 同一オリジンのみ
+    # 本番環境では同一オリジンのみ許可（originsを指定しない = 同一オリジンのみ）
+    CORS(app, supports_credentials=True)
 else:
+    # 開発環境ではlocalhostを許可
     CORS(app, supports_credentials=True, origins=['http://localhost:3000', 'http://localhost:5000'])
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///travels.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
