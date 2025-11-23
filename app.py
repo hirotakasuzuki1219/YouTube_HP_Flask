@@ -201,7 +201,12 @@ def serve_react_app(path):
     if static_folder:
         index_path = os.path.join(static_folder, 'index.html')
         if os.path.exists(index_path):
-            return send_from_directory(static_folder, 'index.html')
+            try:
+                return send_from_directory(static_folder, 'index.html')
+            except Exception as e:
+                # エラーが発生した場合のフォールバック
+                with open(index_path, 'r', encoding='utf-8') as f:
+                    return f.read()
     
     # フォールバック
     return 'React app not found. Please build the app.', 500
