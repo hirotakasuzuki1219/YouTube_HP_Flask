@@ -17,7 +17,10 @@ if os.environ.get('FLASK_ENV') == 'production':
 else:
     # 開発環境ではlocalhostを許可
     CORS(app, supports_credentials=True, origins=['http://localhost:3000', 'http://localhost:5000'])
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///travels.db')
+# データベースのパスを設定（instance/ディレクトリに保存）
+db_path = os.path.join('instance', 'travels.db')
+os.makedirs('instance', exist_ok=True)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', f'sqlite:///{db_path}')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24).hex())
 app.config['SESSION_COOKIE_SECURE'] = os.environ.get('FLASK_ENV') == 'production'
@@ -180,6 +183,10 @@ def robots_txt():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react_app(path):
+    # APIエンドポイントは除外（既に定義されている）
+    if path.startswith('api/'):
+        return '', 404
+    
     # 静的ファイル（JS、CSS、画像など）を配信
     static_folder = app.static_folder
     if static_folder and path:
@@ -189,10 +196,11 @@ def serve_react_app(path):
             if os.path.exists(file_path):
                 return send_from_directory(static_folder, path)
         
-        # その他の静的ファイル
-        file_path = os.path.join(static_folder, path)
-        if os.path.exists(file_path) and os.path.isfile(file_path):
-            return send_from_directory(static_folder, path)
+        # その他の静的ファイル（拡張子があるファイルのみ）
+        if '.' in path and not path.endswith('/'):
+            file_path = os.path.join(static_folder, path)
+            if os.path.exists(file_path) and os.path.isfile(file_path):
+                return send_from_directory(static_folder, path)
     
     # それ以外はReactアプリのindex.htmlを返す（SPAのため）
     if static_folder:

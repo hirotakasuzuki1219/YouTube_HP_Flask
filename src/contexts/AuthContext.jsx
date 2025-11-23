@@ -15,7 +15,14 @@ export function AuthProvider({ children }) {
       const response = await fetch('/api/check-auth', {
         credentials: 'include'
       })
+      if (!response.ok) {
+        console.error('認証チェック失敗:', response.status, response.statusText)
+        setIsAuthenticated(false)
+        setLoading(false)
+        return
+      }
       const data = await response.json()
+      console.log('認証状態:', data)
       setIsAuthenticated(data.authenticated)
     } catch (error) {
       console.error('認証チェックエラー:', error)
@@ -35,7 +42,15 @@ export function AuthProvider({ children }) {
         credentials: 'include',
         body: JSON.stringify({ password })
       })
+      
+      if (!response.ok) {
+        console.error('ログイン失敗:', response.status, response.statusText)
+        const errorData = await response.json().catch(() => ({}))
+        return { success: false, error: errorData.error || 'ログインに失敗しました' }
+      }
+      
       const data = await response.json()
+      console.log('ログイン結果:', data)
       
       if (data.success) {
         setIsAuthenticated(true)
@@ -44,7 +59,8 @@ export function AuthProvider({ children }) {
         return { success: false, error: data.error || 'ログインに失敗しました' }
       }
     } catch (error) {
-      return { success: false, error: 'ネットワークエラーが発生しました' }
+      console.error('ログインエラー:', error)
+      return { success: false, error: 'ネットワークエラーが発生しました: ' + error.message }
     }
   }
 
