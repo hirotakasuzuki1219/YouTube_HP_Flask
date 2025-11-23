@@ -183,47 +183,39 @@ def robots_txt():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react_app(path):
-    # APIエンドポイントは除外（既に定義されている）
-    if path.startswith('api/'):
+    # デバッグログ
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info(f"Serving React app for path: '{path}'")
+    
+    # APIエンドポイント、静的ファイル、sitemap、robots.txtは除外
+    if path.startswith('api/') or path in ['sitemap.xml', 'robots.txt']:
+        logger.warning(f"Path '{path}' excluded, returning 404")
         return '', 404
     
     static_folder = app.static_folder
+    logger.info(f"Static folder: {static_folder}")
     
-    # 静的ファイル（JS、CSS、画像など）を配信
+    # 静的ファイル（assets/配下のJS、CSSなど）を配信
     if static_folder and path:
-        # アセットファイル（JS、CSSなど）の配信
         if path.startswith('assets/'):
             file_path = os.path.join(static_folder, path)
-            if os.path.exists(file_path):
-                return send_from_directory(static_folder, path)
-        
-        # その他の静的ファイル（拡張子があるファイルのみ）
-        if '.' in path and not path.endswith('/'):
-            file_path = os.path.join(static_folder, path)
             if os.path.exists(file_path) and os.path.isfile(file_path):
+                logger.info(f"Serving static file: {path}")
                 return send_from_directory(static_folder, path)
     
     # それ以外はReactアプリのindex.htmlを返す（SPAのため）
     # /admin, /login, /map などのルートはすべてindex.htmlにリダイレクト
     if static_folder:
         index_path = os.path.join(static_folder, 'index.html')
+        logger.info(f"Index path: {index_path}, exists: {os.path.exists(index_path)}")
         if os.path.exists(index_path):
+            logger.info(f"Serving index.html for path: '{path}'")
             return send_from_directory(static_folder, 'index.html')
-        else:
-            # distフォルダが存在しない場合のエラーメッセージ
-            return f'''
-            <html>
-                <head><title>Build Required</title></head>
-                <body>
-                    <h1>React app not built</h1>
-                    <p>Please run "npm run build" to build the React app.</p>
-                    <p>Static folder: {static_folder}</p>
-                    <p>Index path: {index_path}</p>
-                </body>
-            </html>
-            ''', 500
-    else:
-        return 'Static folder not configured', 500
+    
+    # フォールバック
+    logger.error(f"React app not found. Static folder: {static_folder}")
+    return 'React app not found. Please build the app.', 500
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
