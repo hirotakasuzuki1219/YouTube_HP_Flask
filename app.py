@@ -18,8 +18,9 @@ else:
     # 開発環境ではlocalhostを許可
     CORS(app, supports_credentials=True, origins=['http://localhost:3000', 'http://localhost:5000'])
 # データベースのパスを設定（instance/ディレクトリに保存）
-db_path = os.path.join('instance', 'travels.db')
-os.makedirs('instance', exist_ok=True)
+instance_dir = os.path.join(os.getcwd(), 'instance')
+os.makedirs(instance_dir, exist_ok=True, mode=0o755)
+db_path = os.path.join(instance_dir, 'travels.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', f'sqlite:///{db_path}')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24).hex())
@@ -183,38 +184,26 @@ def robots_txt():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react_app(path):
-    # デバッグログ
-    import logging
-    logger = logging.getLogger(__name__)
-    logger.info(f"Serving React app for path: '{path}'")
-    
-    # APIエンドポイント、静的ファイル、sitemap、robots.txtは除外
-    if path.startswith('api/') or path in ['sitemap.xml', 'robots.txt']:
-        logger.warning(f"Path '{path}' excluded, returning 404")
+    # APIエンドポイントは除外（既に定義されている）
+    if path.startswith('api/'):
         return '', 404
     
     static_folder = app.static_folder
-    logger.info(f"Static folder: {static_folder}")
     
     # 静的ファイル（assets/配下のJS、CSSなど）を配信
-    if static_folder and path:
-        if path.startswith('assets/'):
-            file_path = os.path.join(static_folder, path)
-            if os.path.exists(file_path) and os.path.isfile(file_path):
-                logger.info(f"Serving static file: {path}")
-                return send_from_directory(static_folder, path)
+    if static_folder and path and path.startswith('assets/'):
+        file_path = os.path.join(static_folder, path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return send_from_directory(static_folder, path)
     
     # それ以外はReactアプリのindex.htmlを返す（SPAのため）
     # /admin, /login, /map などのルートはすべてindex.htmlにリダイレクト
     if static_folder:
         index_path = os.path.join(static_folder, 'index.html')
-        logger.info(f"Index path: {index_path}, exists: {os.path.exists(index_path)}")
         if os.path.exists(index_path):
-            logger.info(f"Serving index.html for path: '{path}'")
             return send_from_directory(static_folder, 'index.html')
     
     # フォールバック
-    logger.error(f"React app not found. Static folder: {static_folder}")
     return 'React app not found. Please build the app.', 500
 
 if __name__ == "__main__":
