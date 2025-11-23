@@ -184,31 +184,44 @@ def robots_txt():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react_app(path):
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info(f"=== serve_react_app called with path: '{path}' ===")
+    
     # APIエンドポイントは除外（既に定義されている）
     if path.startswith('api/'):
+        logger.warning(f"Path '{path}' is API endpoint, returning 404")
         return '', 404
     
     static_folder = app.static_folder
+    logger.info(f"Static folder: {static_folder}")
     
     # 静的ファイル（assets/配下のJS、CSSなど）を配信
     if static_folder and path and path.startswith('assets/'):
         file_path = os.path.join(static_folder, path)
         if os.path.exists(file_path) and os.path.isfile(file_path):
+            logger.info(f"Serving static file: {path}")
             return send_from_directory(static_folder, path)
     
     # それ以外はReactアプリのindex.htmlを返す（SPAのため）
     # /admin, /login, /map などのルートはすべてindex.htmlにリダイレクト
     if static_folder:
         index_path = os.path.join(static_folder, 'index.html')
+        logger.info(f"Index path: {index_path}, exists: {os.path.exists(index_path)}")
         if os.path.exists(index_path):
             try:
+                logger.info(f"Serving index.html for path: '{path}'")
                 return send_from_directory(static_folder, 'index.html')
             except Exception as e:
+                logger.error(f"Error serving index.html: {e}")
                 # エラーが発生した場合のフォールバック
                 with open(index_path, 'r', encoding='utf-8') as f:
                     return f.read()
+        else:
+            logger.error(f"index.html not found at {index_path}")
     
     # フォールバック
+    logger.error(f"React app not found. Static folder: {static_folder}")
     return 'React app not found. Please build the app.', 500
 
 if __name__ == "__main__":
