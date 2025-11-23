@@ -9,11 +9,17 @@ COPY package*.json ./
 # 依存関係をインストール（開発依存関係も含む）
 RUN npm ci
 
-# ソースコードをコピー
-COPY . .
+# ソースコードをコピー（必要なファイルのみ）
+COPY index.html .
+COPY vite.config.js .
+COPY src ./src
 
 # Reactアプリをビルド
 RUN npm run build
+
+# ビルド結果を確認
+RUN ls -la dist/ || (echo "Build failed: dist directory not found" && exit 1)
+RUN test -f dist/index.html || (echo "Build failed: index.html not found" && exit 1)
 
 # Python環境でFlaskアプリを実行
 FROM python:3.11-slim
@@ -39,15 +45,15 @@ COPY static ./static
 # instanceディレクトリを作成（データベース用）
 RUN mkdir -p instance
 
-# ポートを公開
-EXPOSE 8080
+# ポートを公開（Koyebは8000ポートを使用）
+EXPOSE 8000
 
 # 環境変数を設定
-ENV PORT=8080
+ENV PORT=8000
 ENV FLASK_ENV=production
 ENV PYTHONUNBUFFERED=1
 
-# アプリを起動
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--timeout", "120", "app:app"]
+# アプリを起動（Koyebのデフォルトポート8000を使用）
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120", "app:app"]
 
 

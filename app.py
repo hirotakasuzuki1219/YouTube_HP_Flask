@@ -47,7 +47,11 @@ class Travel(db.Model):
 
 # データベース初期化
 with app.app_context():
-    db.create_all()
+    try:
+        db.create_all()
+    except Exception as e:
+        # テーブルが既に存在する場合は無視
+        print(f"Database initialization: {e}")
 
 # 認証用のデコレータ
 def login_required(f):
