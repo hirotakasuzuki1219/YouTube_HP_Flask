@@ -49,6 +49,9 @@ COPY static ./static
 # instanceディレクトリを作成（データベース用）
 RUN mkdir -p instance
 
+# 初期データ投入スクリプトをコピー（オプション）
+COPY init_db.py .
+
 # ポートを公開（Koyebは8000ポートを使用）
 EXPOSE 8000
 

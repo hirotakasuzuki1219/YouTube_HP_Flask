@@ -71,8 +71,8 @@ Flaskサーバーが `dist/` ディレクトリからReactアプリを配信し�
 │   ├── App.jsx           # メインアプリコンポーネント
 │   └── main.jsx          # エントリーポイント
 ├── dist/                  # ビルドされたReactアプリ（生成される）
-├── static/                # 静的ファイル
-├── templates/             # 旧テンプレート（使用されない）
+├── static/                # 静的ファイル（画像、robots.txt、sitemap.xml）
+├── instance/              # データベースファイル（SQLite）
 ├── package.json           # Node.js依存関係
 ├── vite.config.js        # Vite設定
 └── requirements.txt       # Python依存関係
@@ -116,4 +116,46 @@ export ADMIN_PASSWORD="your-secure-password"
 - `POST /api/login` - ログイン
 - `POST /api/logout` - ログアウト
 - `GET /api/check-auth` - 認証状態の確認
+
+## Koyebへのデプロイ
+
+### 前提条件
+- GitHubリポジトリにコードをプッシュ済み
+- Koyebアカウントを作成済み
+
+### デプロイ手順
+
+1. **Koyeb Dashboardでの設定**
+   - アプリを選択 → **Settings** → **Build**
+   - **Build Type** を **Dockerfile** に変更
+   - Dockerfileが自動的に検出されます
+
+2. **環境変数の設定**（Settings → Environment Variables）
+   ```
+   ADMIN_PASSWORD=your-secure-password-here
+   SECRET_KEY=your-secret-key-here
+   FLASK_ENV=production
+   PORT=8000
+   ```
+
+3. **GitHubにプッシュ**
+   ```bash
+   git add .
+   git commit -m "Deploy to Koyeb"
+   git push origin master
+   ```
+
+4. **自動デプロイ**
+   - Koyebが自動的にDockerイメージをビルド
+   - コンテナを起動
+
+### データベースの復元
+
+コンテナが再起動されるとデータがリセットされます。初期データを復元するには：
+
+```bash
+python init_db.py
+```
+
+詳細は `restore_data.md` を参照してください。
 
