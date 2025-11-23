@@ -38,6 +38,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # ビルドされたReactアプリをコピー
 COPY --from=frontend-builder /app/dist ./dist
 
+# コピーされたdistフォルダの内容を確認
+RUN ls -la dist/ || (echo "ERROR: dist folder not found after copy" && exit 1)
+RUN test -f dist/index.html || (echo "ERROR: index.html not found in dist" && exit 1)
+
 # Flaskアプリとその他のファイルをコピー
 COPY app.py .
 COPY static ./static

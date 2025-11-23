@@ -195,21 +195,42 @@ def serve_react_app(path):
     # それ以外はReactアプリのindex.htmlを返す（SPAのため）
     if static_folder:
         index_path = os.path.join(static_folder, 'index.html')
+        
+        # デバッグ情報をログに出力
+        import logging
+        logging.basicConfig(level=logging.INFO)
+        logger = logging.getLogger(__name__)
+        logger.info(f"Static folder: {static_folder}")
+        logger.info(f"Index path: {index_path}")
+        logger.info(f"Index exists: {os.path.exists(index_path)}")
+        
         if os.path.exists(index_path):
             return send_from_directory(static_folder, 'index.html')
         else:
+            # distフォルダの内容を確認
+            dist_contents = []
+            if os.path.exists(static_folder):
+                try:
+                    dist_contents = os.listdir(static_folder)
+                except Exception as e:
+                    dist_contents = [f"Error listing directory: {e}"]
+            
             # distフォルダが存在しない場合のエラーメッセージ
-            return f'''
+            error_html = f'''
             <html>
                 <head><title>Build Required</title></head>
                 <body>
                     <h1>React app not built</h1>
                     <p>Please run "npm run build" to build the React app.</p>
-                    <p>Static folder: {static_folder}</p>
-                    <p>Index path: {index_path}</p>
+                    <p><strong>Static folder:</strong> {static_folder}</p>
+                    <p><strong>Index path:</strong> {index_path}</p>
+                    <p><strong>Static folder exists:</strong> {os.path.exists(static_folder)}</p>
+                    <p><strong>Contents of static folder:</strong> {', '.join(dist_contents) if dist_contents else 'Empty or not accessible'}</p>
                 </body>
             </html>
-            ''', 500
+            '''
+            logger.error(error_html)
+            return error_html, 500
     else:
         return 'Static folder not configured', 500
 
