@@ -6,8 +6,8 @@ WORKDIR /app
 # package.jsonとpackage-lock.jsonをコピー
 COPY package*.json ./
 
-# 依存関係をインストール
-RUN npm ci --only=production=false
+# 依存関係をインストール（開発依存関係も含む）
+RUN npm ci
 
 # ソースコードをコピー
 COPY . .
@@ -49,4 +49,5 @@ ENV PYTHONUNBUFFERED=1
 
 # アプリを起動
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--timeout", "120", "app:app"]
+
 
