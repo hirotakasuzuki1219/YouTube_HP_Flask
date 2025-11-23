@@ -128,3 +128,4 @@ Koyeb Dashboardの「Deployments」タブで「Redeploy」をクリック
 - [ ] `app.py`で`static_folder='dist'`が設定されている
 - [ ] 環境変数`FLASK_ENV=production`が設定されている
 
+
