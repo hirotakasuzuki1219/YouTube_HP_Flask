@@ -1,32 +1,23 @@
-from flask import Flask, render_template, send_from_directory, send_file, request, jsonify, make_response, session
+from flask import Flask, render_template, send_from_directory, send_file, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 import os
-from functools import wraps
-import hashlib
 
 # load_dotenv()
 
 app = Flask(__name__, static_folder='dist', static_url_path='')
-# CORSを有効化（認証用のクッキーを送信できるように設定）
-# 本番環境では同一オリジンのみ許可（originsを指定しない）
+# CORSを有効化
 if os.environ.get('FLASK_ENV') == 'production':
-    # 本番環境では同一オリジンのみ許可（originsを指定しない = 同一オリジンのみ）
-    CORS(app, supports_credentials=True)
+    CORS(app)
 else:
-    # 開発環境ではlocalhostを許可
-    CORS(app, supports_credentials=True, origins=['http://localhost:3000', 'http://localhost:5000'])
+    CORS(app, origins=['http://localhost:3000', 'http://localhost:5000'])
 # データベースのパスを設定（instance/ディレクトリに保存）
 instance_dir = os.path.join(os.getcwd(), 'instance')
 os.makedirs(instance_dir, exist_ok=True, mode=0o755)
 db_path = os.path.join(instance_dir, 'travels.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', f'sqlite:///{db_path}')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(24).hex())
-app.config['SESSION_COOKIE_SECURE'] = os.environ.get('FLASK_ENV') == 'production'
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 db = SQLAlchemy(app)
 
@@ -59,19 +50,6 @@ with app.app_context():
         # テーブルが既に存在する場合は無視
         print(f"Database initialization: {e}")
 
-# 認証用のデコレータ
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not session.get('authenticated'):
-            return jsonify({'error': '認証が必要です'}), 401
-        return f(*args, **kwargs)
-    return decorated_function
-
-# パスワードのハッシュ化（環境変数から取得、デフォルト値は設定しない）
-def get_admin_password():
-    return os.environ.get('ADMIN_PASSWORD', 'admin123')  # 本番環境では必ず環境変数で設定すること
-
 # セキュリティヘッダーを追加するミドルウェア
 @app.after_request
 def set_security_headers(response):
@@ -102,74 +80,7 @@ def set_security_headers(response):
     return response
 
 # --- ルート ---
-# APIエンドポイント（React SPAのルーティングより前に定義する必要がある）
-@app.route('/api/travels', methods=['GET'])
-def get_travels():
-    travels = Travel.query.order_by(Travel.created_at).all()
-    return jsonify([travel.to_dict() for travel in travels])
-
-@app.route('/api/travels', methods=['POST'])
-@login_required
-def create_travel():
-    data = request.json
-    travel = Travel(
-        name=data['name'],
-        lat=float(data['lat']),
-        lon=float(data['lon']),
-        note=data.get('note', ''),
-        youtube=data.get('youtube', '')
-    )
-    db.session.add(travel)
-    db.session.commit()
-    return jsonify(travel.to_dict()), 201
-
-@app.route('/api/travels/<int:travel_id>', methods=['PUT'])
-@login_required
-def update_travel(travel_id):
-    travel = Travel.query.get_or_404(travel_id)
-    data = request.json
-    travel.name = data['name']
-    travel.lat = float(data['lat'])
-    travel.lon = float(data['lon'])
-    travel.note = data.get('note', '')
-    travel.youtube = data.get('youtube', '')
-    travel.updated_at = datetime.utcnow()
-    db.session.commit()
-    return jsonify(travel.to_dict())
-
-@app.route('/api/travels/<int:travel_id>', methods=['DELETE'])
-@login_required
-def delete_travel(travel_id):
-    travel = Travel.query.get_or_404(travel_id)
-    db.session.delete(travel)
-    db.session.commit()
-    return '', 204
-
-# 認証APIエンドポイント
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.json
-    password = data.get('password', '')
-    admin_password = get_admin_password()
-    
-    # パスワードの比較（ハッシュ化して比較することも可能）
-    if password == admin_password:
-        session['authenticated'] = True
-        return jsonify({'success': True, 'message': 'ログイン成功'})
-    else:
-        return jsonify({'success': False, 'error': 'パスワードが正しくありません'}), 401
-
-@app.route('/api/logout', methods=['POST'])
-def logout():
-    session.pop('authenticated', None)
-    return jsonify({'success': True, 'message': 'ログアウトしました'})
-
-@app.route('/api/check-auth', methods=['GET'])
-def check_auth():
-    if session.get('authenticated'):
-        return jsonify({'authenticated': True})
-    else:
-        return jsonify({'authenticated': False})
+# APIエンドポイントは削除（ハードコードデータを使用するため）
 
 # 静的ファイルの配信（robots.txt, sitemap.xmlなど）
 @app.route('/sitemap.xml')

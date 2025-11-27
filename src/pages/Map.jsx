@@ -17,6 +17,36 @@ let DefaultIcon = L.icon({
 })
 L.Marker.prototype.options.icon = DefaultIcon
 
+// ハードコードされた旅行データ
+// ここにピンのデータを追加・編集してください
+const HARDCODED_TRAVELS = [
+  {
+    id: 1,
+    name: '東京',
+    lat: 35.6762,
+    lon: 139.6503,
+    note: '出発地点',
+    youtube: ''
+  },
+  {
+    id: 2,
+    name: 'パリ',
+    lat: 48.8566,
+    lon: 2.3522,
+    note: 'フランスの首都',
+    youtube: ''
+  },
+  {
+    id: 3,
+    name: 'ニューヨーク',
+    lat: 40.7128,
+    lon: -74.0060,
+    note: 'アメリカの大都市',
+    youtube: ''
+  }
+  // ここに追加のピンを追加できます
+]
+
 function Map() {
   const mapRef = useRef(null)
   const mapInstanceRef = useRef(null)
@@ -33,43 +63,34 @@ function Map() {
       }).addTo(mapInstanceRef.current)
     }
 
-    // 旅行データを取得
-    const fetchTravels = async () => {
-      try {
-        const response = await fetch('/api/travels')
-        const travels = await response.json()
+    // ハードコードされたデータを使用
+    const travels = HARDCODED_TRAVELS
 
-        // 既存のマーカーを削除
-        markersRef.current.forEach(marker => {
-          mapInstanceRef.current.removeLayer(marker)
-        })
-        markersRef.current = []
+    // 既存のマーカーを削除
+    markersRef.current.forEach(marker => {
+      mapInstanceRef.current.removeLayer(marker)
+    })
+    markersRef.current = []
 
-        // 新しいマーカーを追加
-        travels.forEach(travel => {
-          const marker = L.marker([travel.lat, travel.lon])
-            .addTo(mapInstanceRef.current)
-            .bindPopup(
-              `<div class="popup-content">
-                <b>${travel.name}</b><br/>
-                ${travel.note ? `<p>${travel.note}</p>` : ''}
-                ${travel.youtube ? `<iframe width="200" height="113" src="${travel.youtube}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` : ''}
-              </div>`
-            )
-          markersRef.current.push(marker)
-        })
+    // 新しいマーカーを追加
+    travels.forEach(travel => {
+      const marker = L.marker([travel.lat, travel.lon])
+        .addTo(mapInstanceRef.current)
+        .bindPopup(
+          `<div class="popup-content">
+            <b>${travel.name}</b><br/>
+            ${travel.note ? `<p>${travel.note}</p>` : ''}
+            ${travel.youtube ? `<iframe width="200" height="113" src="${travel.youtube}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` : ''}
+          </div>`
+        )
+      markersRef.current.push(marker)
+    })
 
-        // データがある場合、地図をズーム
-        if (travels.length > 0) {
-          const bounds = L.latLngBounds(travels.map(t => [t.lat, t.lon]))
-          mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50] })
-        }
-      } catch (error) {
-        console.error('データの取得に失敗しました:', error)
-      }
+    // データがある場合、地図をズーム
+    if (travels.length > 0) {
+      const bounds = L.latLngBounds(travels.map(t => [t.lat, t.lon]))
+      mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50] })
     }
-
-    fetchTravels()
 
     // クリーンアップ
     return () => {

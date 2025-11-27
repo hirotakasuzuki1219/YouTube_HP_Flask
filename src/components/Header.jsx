@@ -1,15 +1,9 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { useAuth } from '../contexts/AuthContext'
 import './Header.css'
 
 function Header() {
   const location = useLocation()
-  const { isAuthenticated, logout } = useAuth()
-
-  const handleLogout = async () => {
-    await logout()
-  }
 
   return (
     <motion.header
@@ -38,22 +32,6 @@ function Header() {
         >
           世界一周の軌跡
         </Link>
-        {isAuthenticated && (
-          <>
-            <Link
-              to="/admin"
-              className={location.pathname === '/admin' ? 'active' : ''}
-            >
-              管理
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="logout-button"
-            >
-              ログアウト
-            </button>
-          </>
-        )}
       </nav>
     </motion.header>
   )
