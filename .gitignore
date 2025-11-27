@@ -1,4 +1,10 @@
-# Python
+# 環境変数ファイル
+.env
+
+# othersフォルダ（中身すべて）
+others/
+
+# Python関連
 __pycache__/
 *.py[cod]
 *$py.class
@@ -8,27 +14,17 @@ env/
 venv/
 ENV/
 .venv
-instance/
-*.db
-*.sqlite
 
-# React / Node
-node_modules/
-# dist/ はKoyebでビルドするため、Gitに含める必要がある場合がある
-# ただし、通常はビルド時に生成されるので除外してもOK
-.DS_Store
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# IDE
+# IDE関連
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# Environment
-.env
-.env.local
+# OS関連
+.DS_Store
+Thumbs.db
+# 大きな動画ファイル（必要に応じてコメントアウト）
+# static/videos/*.mp4
+# static/videos/*.MP4

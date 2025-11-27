@@ -8,8 +8,7 @@ function Home() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.1
+        staggerChildren: 0.2
       }
     }
   }
@@ -19,35 +18,24 @@ function Home() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut"
-      }
+      transition: { duration: 0.5 }
     }
   }
 
   return (
     <motion.div
-      className="home"
+      className="home-page"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <motion.section variants={itemVariants} className="intro-section">
-        <motion.h2
-          initial={{ scale: 0.9 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          はじめに
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-        >
-          このサイトでは、会社をやめた「ゆか」と「ひろ」と、娘の3人で訪れた世界各地の思い出を発信しています。非日常の中から本当の「好き」を見つけ出す物語。
-        </motion.p>
+
+      <motion.section variants={itemVariants} className="about-section">
+        <h2>私たちについて</h2>
+        <p>
+          会社をやめた「ゆか」と「ひろ」と娘の3人で、世界一周の旅をしています。
+          非日常の中から本当の「好き」を見つけ出す家族のストーリーをお届けします。
+        </p>
       </motion.section>
 
       <motion.section variants={itemVariants} className="sns-section">
@@ -96,8 +84,4 @@ function Home() {
 }
 
 export default Home
-
-
-
-
 

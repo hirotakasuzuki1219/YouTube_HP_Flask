@@ -18,7 +18,7 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon
 
 // ハードコードされた旅行データ
-// ここにピンのデータを追加・編集してください
+// init_db.pyのexisting_travelsから転載
 const HARDCODED_TRAVELS = [
   {
     id: 1,
@@ -60,7 +60,62 @@ const HARDCODED_TRAVELS = [
     note: '閉じ込められて詰んだ',
     youtube: 'https://www.youtube.com/embed/k6KMBY0qDo8'
   },
-  // ここに追加のピンを追加できます
+  {
+    id: 6,
+    name: 'カイロ国際空港',
+    lat: 30.12177042996925,
+    lon: 31.416275346081747,
+    note: 'トルコへ移動！',
+    youtube: 'https://www.youtube.com/embed/X7AN2xgwFTk'
+  },
+  {
+    id: 7,
+    name: 'イスタンブール',
+    lat: 41.00539177063419,
+    lon: 28.96329556546734,
+    note: 'イスタンブールでの日常を堪能',
+    youtube: 'https://www.youtube.com/embed/_ubQxQfXTrw'
+  },
+  {
+    id: 8,
+    name: 'アヤソフィアなど',
+    lat: 41.009284623958024,
+    lon: 28.980010132269836,
+    note: 'イスタンブール観光！',
+    youtube: 'https://www.youtube.com/embed/T-THt_l9TKQ'
+  },
+  {
+    id: 9,
+    name: 'ザビハ・ギョクチェン国際空港',
+    lat: 40.89569332688844,
+    lon: 29.313471511623103,
+    note: '次の目的地はカッパドキアへ！',
+    youtube: 'https://www.youtube.com/embed/fmsuShXs0Ds'
+  },
+  {
+    id: 10,
+    name: 'カッパドキア',
+    lat: 38.63997623195001,
+    lon: 34.832035222971506,
+    note: 'カッパドキアとは熱気球！',
+    youtube: 'https://www.youtube.com/embed/M-5Dgpj45xo'
+  },
+  {
+    id: 11,
+    name: 'ローズバレー',
+    lat: 38.659307136759445,
+    lon: 34.843411955828536,
+    note: '無料で大冒険！',
+    youtube: 'https://www.youtube.com/embed/MiYJTreMAgY'
+  },
+  {
+    id: 12,
+    name: 'カイマクル地下都市',
+    lat: 38.46012949899028,
+    lon: 34.752297238100866,
+    note: 'ツアーでカッパドキアを堪能',
+    youtube: 'https://www.youtube.com/embed/57-SMFw6Z-E'
+  }
 ]
 
 function Map() {

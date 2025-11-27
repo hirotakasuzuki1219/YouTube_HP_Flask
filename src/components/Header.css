@@ -1,72 +1,53 @@
 .header {
-  background: rgba(0, 119, 182, 0.95);
-  color: white;
-  padding: 1.5em;
-  text-align: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  background: white;
+  padding: 1.5em 2em;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .header h1 {
-  font-size: 1.8em;
-  margin-bottom: 1em;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 1.5em;
+  color: #0077b6;
+  margin: 0;
 }
 
 .header nav {
   display: flex;
-  justify-content: center;
-  gap: 2em;
-  flex-wrap: wrap;
+  gap: 1.5em;
+  align-items: center;
 }
 
 .header nav a {
-  color: white;
   text-decoration: none;
-  font-size: 1.1em;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s;
   padding: 0.5em 1em;
   border-radius: 5px;
-  transition: all 0.3s ease;
-  position: relative;
 }
 
 .header nav a:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  color: #0077b6;
+  background: #f0f0f0;
 }
 
 .header nav a.active {
-  background: rgba(255, 255, 255, 0.3);
-  font-weight: bold;
+  color: #0077b6;
+  background: #e3f2fd;
 }
 
-.header nav a.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 2px;
-  background: white;
-}
-
-.logout-button {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 0.5em 1em;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
-}
-
-.logout-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 1em;
+  }
+  
+  .header nav {
+    width: 100%;
+    justify-content: center;
+  }
 }
 

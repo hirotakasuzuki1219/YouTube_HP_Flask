@@ -63,4 +63,3 @@ ENV PYTHONUNBUFFERED=1
 # アプリを起動（Koyebのデフォルトポート8000を使用）
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120", "app:app"]
 
-
