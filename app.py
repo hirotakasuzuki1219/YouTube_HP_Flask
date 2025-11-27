@@ -1,7 +1,5 @@
-from flask import Flask, render_template, send_from_directory, send_file, request, jsonify, make_response
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, send_from_directory, request
 from flask_cors import CORS
-from datetime import datetime
 import os
 
 # load_dotenv()
@@ -12,55 +10,16 @@ if os.environ.get('FLASK_ENV') == 'production':
     CORS(app)
 else:
     CORS(app, origins=['http://localhost:3000', 'http://localhost:5000'])
-# データベースのパスを設定（instance/ディレクトリに保存）
-instance_dir = os.path.join(os.getcwd(), 'instance')
-os.makedirs(instance_dir, exist_ok=True, mode=0o755)
-db_path = os.path.join(instance_dir, 'travels.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', f'sqlite:///{db_path}')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-# データベースモデル
-class Travel(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-    lat = db.Column(db.Float, nullable=False)
-    lon = db.Column(db.Float, nullable=False)
-    note = db.Column(db.Text)
-    youtube = db.Column(db.String(500))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'lat': self.lat,
-            'lon': self.lon,
-            'note': self.note,
-            'youtube': self.youtube
-        }
-
-# データベース初期化（現在は使用していないが、将来の拡張のために残す）
-with app.app_context():
-    try:
-        db.create_all()
-    except Exception as e:
-        # テーブルが既に存在する場合は無視（エラーメッセージは出力しない）
-        pass
-
+    
 # セキュリティヘッダーを追加するミドルウェア
 @app.after_request
 def set_security_headers(response):
-    # セキュリティヘッダーを設定
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
     response.headers['X-XSS-Protection'] = '1; mode=block'
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
     
-    # CSP (Content Security Policy) - Reactアプリ用に調整
     csp = (
         "default-src 'self'; "
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; "
@@ -73,7 +32,6 @@ def set_security_headers(response):
     )
     response.headers['Content-Security-Policy'] = csp
     
-    # HTTPSの強制（本番環境の場合）
     if os.environ.get('FLASK_ENV') == 'production':
         response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
     
