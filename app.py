@@ -42,13 +42,13 @@ class Travel(db.Model):
             'youtube': self.youtube
         }
 
-# データベース初期化
+# データベース初期化（現在は使用していないが、将来の拡張のために残す）
 with app.app_context():
     try:
         db.create_all()
     except Exception as e:
-        # テーブルが既に存在する場合は無視
-        print(f"Database initialization: {e}")
+        # テーブルが既に存在する場合は無視（エラーメッセージは出力しない）
+        pass
 
 # セキュリティヘッダーを追加するミドルウェア
 @app.after_request
