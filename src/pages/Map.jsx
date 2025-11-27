@@ -22,28 +22,44 @@ L.Marker.prototype.options.icon = DefaultIcon
 const HARDCODED_TRAVELS = [
   {
     id: 1,
-    name: '東京',
-    lat: 35.6762,
-    lon: 139.6503,
-    note: '出発地点',
-    youtube: ''
+    name: '成田国際空港',
+    lat: 35.776366,
+    lon: 140.386249,
+    note: 'ここから世界一周をスタート！まずはエジプトへ',
+    youtube: 'https://www.youtube.com/embed/MsZmu32UglE'
   },
   {
     id: 2,
-    name: 'パリ',
-    lat: 48.8566,
-    lon: 2.3522,
-    note: 'フランスの首都',
-    youtube: ''
+    name: 'エジプト・ギザ周辺',
+    lat: 29.972883,
+    lon: 31.128796,
+    note: 'ピラミッド周辺を観光ツアーに参加',
+    youtube: 'https://www.youtube.com/embed/_1sYoq9pQWg'
   },
   {
     id: 3,
-    name: 'ニューヨーク',
-    lat: 40.7128,
-    lon: -74.0060,
-    note: 'アメリカの大都市',
-    youtube: ''
-  }
+    name: '大エジプト博物館',
+    lat: 29.995239,
+    lon: 31.119273,
+    note: 'プレオープン中のレアな時期に潜入',
+    youtube: 'https://www.youtube.com/embed/-6LvRT89h_k'
+  },
+  {
+    id: 4,
+    name: 'カイロ観光',
+    lat: 30.046261,
+    lon: 31.262404,
+    note: 'アズハルモスクなどカイロ観光を堪能',
+    youtube: 'https://www.youtube.com/embed/F1OhTilyzu0'
+  },
+  {
+    id: 5,
+    name: 'カイロ脱出',
+    lat: 30.015892,
+    lon: 31.224700,
+    note: '閉じ込められて詰んだ',
+    youtube: 'https://www.youtube.com/embed/k6KMBY0qDo8'
+  },
   // ここに追加のピンを追加できます
 ]
 
