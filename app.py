@@ -10,7 +10,7 @@ if os.environ.get('FLASK_ENV') == 'production':
     CORS(app)
 else:
     CORS(app, origins=['http://localhost:3000', 'http://localhost:5000'])
-    
+
 # セキュリティヘッダーを追加するミドルウェア
 @app.after_request
 def set_security_headers(response):
@@ -48,6 +48,10 @@ def sitemap():
 @app.route('/robots.txt')
 def robots_txt():
     return send_from_directory('static', 'robots.txt', mimetype='text/plain')
+
+@app.route('/test')
+def empty_page():
+    return send_from_directory('static', 'test.html', mimetype='text/html')
 
 # React SPAのためのルート - すべてのルートをindex.htmlにリダイレクト（最後に定義）
 @app.route('/', defaults={'path': ''}, methods=['GET', 'HEAD'])
