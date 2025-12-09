@@ -18,7 +18,6 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon
 
 // ハードコードされた旅行データ
-// init_db.pyのexisting_travelsから転載
 const HARDCODED_TRAVELS = [
   {
     id: 1,
@@ -115,6 +114,14 @@ const HARDCODED_TRAVELS = [
     lon: 34.752297238100866,
     note: 'ツアーでカッパドキアを堪能',
     youtube: 'https://www.youtube.com/embed/57-SMFw6Z-E'
+  },
+  {
+    id: 13,
+    name: 'スメラ修道院（トラブゾン）',
+    lat: 40.690793742775206, 
+    lon: 39.6583305269671,
+    note: 'なんとか移動したのち、スメラ修道院などを訪問',
+    youtube: 'https://www.youtube.com/embed/r3Nnsf8qZXg'
   }
 ]
 
