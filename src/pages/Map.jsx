@@ -120,8 +120,24 @@ const HARDCODED_TRAVELS = [
     name: 'スメラ修道院（トラブゾン）',
     lat: 40.690793742775206, 
     lon: 39.6583305269671,
-    note: 'なんとか移動したのち、スメラ修道院などを訪問',
+    note: 'なんとか到着したのち、スメラ修道院などを訪問',
     youtube: 'https://www.youtube.com/embed/r3Nnsf8qZXg'
+  },
+  {
+    id: 14,
+    name: 'バトゥミ',
+    lat: 41.64634183631234, 
+    lon: 41.63942794063141,
+    note: '陸路からジョージア・バトゥミへ！！',
+    youtube: 'https://www.youtube.com/embed/Q810xuXny9k'
+  },
+  {
+    id: 15,
+    name: 'トビリシ',
+    lat: 41.694031335848315, 
+    lon: 44.8042091476657,
+    note: 'バスでジョージアの首都トビリシへ',
+    youtube: 'https://www.youtube.com/embed/5faQpKOTEC0'
   }
 ]
 
