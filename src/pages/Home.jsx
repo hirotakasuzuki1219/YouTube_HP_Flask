@@ -83,7 +83,7 @@ function Home() {
         </motion.div>
       </motion.section>
 
-      <motion.section variants={itemVariants}>
+      <motion.section variants={itemVariants} className="Nagano-section">
         <h2>長野移住</h2>
         <p>
           世界一周修了後は長野移住し、
