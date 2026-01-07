@@ -37,12 +37,6 @@ function Home() {
           娘の3人の生活を発信しています。
           非日常の中から本当の「好き」を見つけ出す物語。
         </p>
-        <p>
-          2025/06~2026/02　家族で世界一周。
-        </p>
-        <p>
-          帰国後は長野移住し、子連れ家族に優しいゲストハウスを運営予定。
-        </p>
       </motion.section>
 
       <motion.section variants={itemVariants} className="sns-section">
@@ -75,7 +69,9 @@ function Home() {
       <motion.section variants={itemVariants} className="map-preview-section">
         <h2>世界一周の軌跡</h2>
         <p>
-          世界一周中に訪れた国を地図にまとめています。ピンをクリックすると、その場所に関連するYouTubeをみることができます。
+          2025/06~2026/02　家族で世界一周。
+          訪れた国を地図にまとめています。ピンをクリックすると、
+          その場所に関連するYouTubeをみることができます。
         </p>
         <motion.div
           whileHover={{ scale: 1.02 }}
@@ -86,7 +82,20 @@ function Home() {
           </Link>
         </motion.div>
       </motion.section>
+
+      <motion.section variants={itemVariants}>
+        <h2>長野移住</h2>
+        <p>
+          世界一周修了後は長野移住し、
+          子連れ家族に優しいゲストハウスを運営予定。
+        </p>
+      </motion.section>
+
     </motion.div>
+
+
+
+
   )
 }
 
