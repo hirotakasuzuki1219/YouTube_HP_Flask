@@ -69,7 +69,7 @@ function Home() {
       <motion.section variants={itemVariants} className="map-preview-section">
         <h2>世界一周の軌跡</h2>
         <p>
-          2025/06~2026/02　家族で世界一周。
+          2025/06~2026/02に家族で世界一周をしました。
           訪れた国を地図にまとめています。ピンをクリックすると、
           その場所に関連するYouTubeをみることができます。
         </p>
@@ -86,7 +86,7 @@ function Home() {
       <motion.section variants={itemVariants} className="Nagano-section">
         <h2>長野移住</h2>
         <p>
-          世界一周修了後は長野移住し、
+          世界一周終了後は長野移住し、
           子連れ家族に優しいゲストハウスを運営予定。
         </p>
       </motion.section>
